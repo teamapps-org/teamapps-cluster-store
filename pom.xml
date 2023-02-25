@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.teamapps</groupId>
+    <artifactId>teamapps-cluster-store</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>TeamApps Cluster Store</name>
+    <description>A TeamApps.org distributed file store</description>
+    <url>https://github.com/teamapps-org/teamapps-cluster</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Matthias Bernstein</name>
+            <email>matthias.bernstein@teamapps.org</email>
+            <id>matthias-bernstein</id>
+        </developer>
+    </developers>
+
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.teamapps</groupId>
+            <artifactId>teamapps-cluster</artifactId>
+            <version>0.10</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.teamapps</groupId>
+                <artifactId>teamapps-message-protocol-maven-plugin</artifactId>
+                <version>0.4</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-message-protocol-api</goal>
+                            <goal>generate-test-message-protocol-api</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
