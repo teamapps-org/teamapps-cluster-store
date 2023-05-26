@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-cluster</artifactId>
-            <version>0.10</version>
+            <version>0.11-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

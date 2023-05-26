@@ -81,7 +81,7 @@ public class VaultFileEncryption {
 
 	private void encrypt() {
 		try {
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			passwordHash = createFileHash(inputFile);
 			byte[] iv = new byte[16];
@@ -109,7 +109,7 @@ public class VaultFileEncryption {
 
 	private void decrypt() {
 		try {
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			DigestInputStream digestInputStream = new DigestInputStream(new BufferedInputStream(new FileInputStream(inputFile)), digest);
 			byte[] iv = new byte[16];

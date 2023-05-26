@@ -16,18 +16,29 @@ public class ClusterFile implements FileData {
 	private final long length;
 	private final String descriptor;
 	private final String vaultId;
-	private final String encryptedFileHash;
+	private final String storeHash;
 	private final boolean encrypted;
-	private final String passwordHash;
+	private final String encryptionKey;
 	private final ClusterFileProvider clusterFileProvider;
 
-	public ClusterFile(String fileName, String vaultId, VaultFile vaultFile, String passwordHash, ClusterFileProvider clusterFileProvider) {
+	public ClusterFile(String fileName, String vaultId, String storeHash, long length, String encryptionKey, ClusterFileProvider clusterFileProvider) {
 		this.fileName = fileName;
 		this.vaultId = vaultId;
-		this.encryptedFileHash = vaultFile.getFileHashAsString();
+		this.storeHash = storeHash;
+		this.length = length;
+		this.encryptionKey = encryptionKey;
+		this.descriptor = vaultId + "/" + storeHash;
+		this.encrypted = true;
+		this.clusterFileProvider = clusterFileProvider;
+	}
+
+	public ClusterFile(String fileName, String vaultId, VaultFile vaultFile, String encryptionKey, ClusterFileProvider clusterFileProvider) {
+		this.fileName = fileName;
+		this.vaultId = vaultId;
+		this.storeHash = vaultFile.getFileHashAsString();
 		this.length = vaultFile.getLength();
-		this.passwordHash = passwordHash;
-		this.descriptor = vaultId + "/" + encryptedFileHash;
+		this.encryptionKey = encryptionKey;
+		this.descriptor = vaultId + "/" + storeHash;
 		this.encrypted = true;
 		this.clusterFileProvider = clusterFileProvider;
 	}
@@ -42,9 +53,9 @@ public class ClusterFile implements FileData {
 		this.descriptor = fileData.getDescriptor();
 		String[] parts = descriptor.split("/");
 		this.vaultId = parts[0];
-		this.encryptedFileHash = parts[1];
+		this.storeHash = parts[1];
 		this.encrypted = fileData.isEncrypted();
-		this.passwordHash = fileData.getEncryptionKey();
+		this.encryptionKey = fileData.getEncryptionKey();
 	}
 
 	public ClusterFile(String fileName, long length, String descriptor, String encryptionKey, ClusterFileProvider clusterFileProvider) {
@@ -54,9 +65,9 @@ public class ClusterFile implements FileData {
 		this.descriptor = descriptor;
 		String[] parts = descriptor.split("/");
 		this.vaultId = parts[0];
-		this.encryptedFileHash = parts[1];
+		this.storeHash = parts[1];
 		this.encrypted = true;
-		this.passwordHash = encryptionKey;
+		this.encryptionKey = encryptionKey;
 	}
 
 	@Override
@@ -76,7 +87,7 @@ public class ClusterFile implements FileData {
 
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return clusterFileProvider.getClusterFile(vaultId, new VaultFile(length, encryptedFileHash), passwordHash);
+		return clusterFileProvider.getClusterFile(vaultId, new VaultFile(length, storeHash), encryptionKey);
 	}
 
 	@Override
@@ -96,7 +107,7 @@ public class ClusterFile implements FileData {
 
 	@Override
 	public String getEncryptionKey() {
-		return passwordHash;
+		return encryptionKey;
 	}
 
 	@Override
